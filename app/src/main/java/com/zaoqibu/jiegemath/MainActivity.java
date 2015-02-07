@@ -11,6 +11,7 @@ import android.view.View;
 
 import com.zaoqibu.jiegemath.customview.ImageButtonWithText;
 import com.zaoqibu.jiegemath.fragment.ImageAndNumberFragment;
+import com.zaoqibu.jiegemath.util.MediaPlayerSingleton;
 
 
 public class MainActivity extends ActionBarActivity implements ImageAndNumberFragment.OnFragmentInteractionListener, View.OnClickListener {
@@ -102,9 +103,11 @@ public class MainActivity extends ActionBarActivity implements ImageAndNumberFra
         Problem problem = testPaper.get(curProblemIndex);
         if (result == problem.result()) { //正确
             resultFragment.setBackgroundColor("#FFFFFFFF");
+            MediaPlayerSingleton.getInstance().play(this, "sounds/zhencongming.mp3");
         }
         else { //错误
             resultFragment.setBackgroundColor("#FFEE0000");
+            MediaPlayerSingleton.getInstance().play(this, "sounds/yaojiayou.mp3");
         }
 
         Log.i("test", "result:" + problem.result());
