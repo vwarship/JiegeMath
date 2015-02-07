@@ -13,6 +13,7 @@ import android.widget.SimpleAdapter;
 
 import com.zaoqibu.jiegemath.R;
 import com.zaoqibu.jiegemath.customview.ImageButtonWithText;
+import com.zaoqibu.jiegemath.util.MediaPlayerSingleton;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -99,6 +100,12 @@ public class ImageAndNumberFragment extends Fragment {
         updateUI();
     }
 
+    public  void setNumColumns(int numColumns) {
+        this.numColumns = numColumns;
+
+        updateUI();
+    }
+
     public void setBackgroundColor(String color) {
         this.getView().setBackgroundColor(Color.parseColor(color));
     }
@@ -106,11 +113,21 @@ public class ImageAndNumberFragment extends Fragment {
     private void updateUI() {
         ImageButtonWithText tvNumber = (ImageButtonWithText)getView().findViewById(R.id.tvNumber);
         tvNumber.setText(number == 0 ? "" : String.format("%d", number));
+        tvNumber.setTag(""+number);
+
+        tvNumber.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String number = v.getTag().toString();
+                String soundPath = String.format("sounds/numbers/%s.mp3", number);
+                MediaPlayerSingleton.getInstance().play(ImageAndNumberFragment.this.getActivity(), soundPath);
+            }
+        });
 
         List<Map<String, Object>> images = new ArrayList<Map<String, Object>>();
         for (int i=0; i<number; ++i) {
             Map<String, Object> data = new HashMap<String, Object>();
-            data.put("image", R.drawable.ic_launcher);
+            data.put("image", R.drawable.cw);
             images.add(data);
         }
         GridView gvImages = (GridView)getView().findViewById(R.id.gvImages);

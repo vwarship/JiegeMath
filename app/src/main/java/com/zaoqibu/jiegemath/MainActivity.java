@@ -28,6 +28,7 @@ public class MainActivity extends ActionBarActivity implements ImageAndNumberFra
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         testPaper.add(new ProblemWithAdd(2, 3));
         testPaper.add(new ProblemWithAdd(1, 3));
         testPaper.add(new ProblemWithAdd(3, 3));
@@ -45,6 +46,7 @@ public class MainActivity extends ActionBarActivity implements ImageAndNumberFra
         yFragment.setNumber(testPaper.get(curProblemIndex).getY());
 
         resultFragment = (ImageAndNumberFragment)fm.findFragmentById(R.id.resultFragment);
+        resultFragment.setNumColumns(5);
 
         ImageButtonWithText result1 = (ImageButtonWithText)findViewById(R.id.ibResult1);
         ImageButtonWithText result2 = (ImageButtonWithText)findViewById(R.id.ibResult2);
@@ -102,11 +104,9 @@ public class MainActivity extends ActionBarActivity implements ImageAndNumberFra
 
         Problem problem = testPaper.get(curProblemIndex);
         if (result == problem.result()) { //正确
-            resultFragment.setBackgroundColor("#FFFFFFFF");
             MediaPlayerSingleton.getInstance().play(this, "sounds/zhencongming.mp3");
         }
         else { //错误
-            resultFragment.setBackgroundColor("#FFEE0000");
             MediaPlayerSingleton.getInstance().play(this, "sounds/yaojiayou.mp3");
         }
 
