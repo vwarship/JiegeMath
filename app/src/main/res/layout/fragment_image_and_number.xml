@@ -1,0 +1,22 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.zaoqibu.jiegemath.fragment.ImageAndNumberFragment">
+
+    <GridView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/gvImages"
+        android:verticalSpacing="8dp"
+        android:padding="8dp"
+        android:layout_marginBottom="25dp"
+        android:layout_above="@+id/tvNumber" />
+
+    <com.zaoqibu.jiegemath.customview.ImageButtonWithText
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/tvNumber"
+        android:background="@drawable/number_selector"
+        android:layout_gravity="center_horizontal|bottom" />
+
+</FrameLayout>
