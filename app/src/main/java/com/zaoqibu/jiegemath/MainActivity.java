@@ -4,7 +4,6 @@ import android.app.FragmentManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,57 +12,95 @@ import com.zaoqibu.jiegemath.customview.ImageButtonWithText;
 import com.zaoqibu.jiegemath.fragment.ImageAndNumberFragment;
 import com.zaoqibu.jiegemath.util.MediaPlayerSingleton;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Random;
+
 
 public class MainActivity extends ActionBarActivity implements ImageAndNumberFragment.OnFragmentInteractionListener, View.OnClickListener {
     private ImageAndNumberFragment xFragment;
     private ImageAndNumberFragment yFragment;
     private ImageAndNumberFragment resultFragment;
 
+    private ImageButtonWithText result1;
+    private ImageButtonWithText result2;
+    private ImageButtonWithText result3;
+
     private int result;
 
-    TestPaper testPaper = new TestPaper();
-    private int curProblemIndex = 0;
+    private TestPaper testPaper = new TestPaper();
+
+    private Problem problem = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        testPaper.add(new ProblemWithAdd(2, 3));
-        testPaper.add(new ProblemWithAdd(1, 3));
-        testPaper.add(new ProblemWithAdd(3, 3));
-        testPaper.add(new ProblemWithAdd(4, 2));
-        testPaper.add(new ProblemWithAdd(3, 2));
-        testPaper.add(new ProblemWithAdd(2, 4));
-        testPaper.add(new ProblemWithAdd(3, 1));
-        testPaper.add(new ProblemWithAdd(5, 1));
+        for (int r=2; r<=10; ++r) {
+            for (int x=1; x<r; ++x) {
+                int y = r-x;
+                testPaper.add(new ProblemWithAdd(x, y));
+            }
+        }
 
         FragmentManager fm = this.getFragmentManager();
         xFragment = (ImageAndNumberFragment)fm.findFragmentById(R.id.xFragment);
-        xFragment.setNumber(testPaper.get(curProblemIndex).getX());
-
         yFragment = (ImageAndNumberFragment)fm.findFragmentById(R.id.yFragment);
-        yFragment.setNumber(testPaper.get(curProblemIndex).getY());
 
         resultFragment = (ImageAndNumberFragment)fm.findFragmentById(R.id.resultFragment);
         resultFragment.setNumColumns(5);
 
-        ImageButtonWithText result1 = (ImageButtonWithText)findViewById(R.id.ibResult1);
-        ImageButtonWithText result2 = (ImageButtonWithText)findViewById(R.id.ibResult2);
-        ImageButtonWithText result3 = (ImageButtonWithText)findViewById(R.id.ibResult3);
-
-        result1.setText("4");
-        result1.setTag("4");
-        result2.setText("5");
-        result2.setTag("5");
-        result3.setText("6");
-        result3.setTag("6");
+        result1 = (ImageButtonWithText)findViewById(R.id.ibResult1);
+        result2 = (ImageButtonWithText)findViewById(R.id.ibResult2);
+        result3 = (ImageButtonWithText)findViewById(R.id.ibResult3);
 
         result1.setOnClickListener(this);
         result2.setOnClickListener(this);
         result3.setOnClickListener(this);
+
+        nextProblem();
     }
 
+    private void nextProblem() {
+        problem = getProblemByRandom();
+
+        xFragment.setNumber(problem.getX());
+        yFragment.setNumber(problem.getY());
+
+        List<Integer> results = getResults(problem.result());
+        setResults(results);
+    }
+
+    private Problem getProblemByRandom() {
+        Random random = new Random(Calendar.getInstance().getTimeInMillis());
+        int index = random.nextInt(testPaper.count());
+
+        return testPaper.get(index);
+    }
+
+    private List<Integer> getResults(int result) {
+        List<Integer> results = new ArrayList<Integer>();
+
+        Random random = new Random(Calendar.getInstance().getTimeInMillis());
+        int n = -2 + random.nextInt(3);
+
+        for (int i=0; i<3; ++i) {
+            results.add(n+i+result);
+        }
+
+        return results;
+    }
+
+    private void setResults(List<Integer> results) {
+        result1.setText(results.get(0) + "");
+        result1.setTag(results.get(0));
+        result2.setText(results.get(1) + "");
+        result2.setTag(results.get(1));
+        result3.setText(results.get(2) + "");
+        result3.setTag(results.get(2));
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -99,10 +136,8 @@ public class MainActivity extends ActionBarActivity implements ImageAndNumberFra
             return;
         }
 
-        String tag = v.getTag().toString();
-        result = Integer.parseInt(tag);
+        result = (int)v.getTag();
 
-        Problem problem = testPaper.get(curProblemIndex);
         if (result == problem.result()) { //正确
             MediaPlayerSingleton.getInstance().play(this, "sounds/zhencongming.mp3");
         }
@@ -110,15 +145,9 @@ public class MainActivity extends ActionBarActivity implements ImageAndNumberFra
             MediaPlayerSingleton.getInstance().play(this, "sounds/yaojiayou.mp3");
         }
 
-        Log.i("test", "result:" + problem.result());
         resultFragment.setNumber(problem.result());
 
-        ++ curProblemIndex;
-
-        if (curProblemIndex == 8)
-            curProblemIndex = 0;
-
-        xFragment.setNumber(testPaper.get(curProblemIndex).getX());
-        yFragment.setNumber(testPaper.get(curProblemIndex).getY());
+        nextProblem();
     }
+
 }
