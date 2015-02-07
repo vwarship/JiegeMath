@@ -8,6 +8,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.LayoutAnimationController;
+import android.view.animation.TranslateAnimation;
 import android.widget.GridView;
 import android.widget.SimpleAdapter;
 
@@ -131,6 +136,17 @@ public class ImageAndNumberFragment extends Fragment {
             images.add(data);
         }
         GridView gvImages = (GridView)getView().findViewById(R.id.gvImages);
+
+        AnimationSet set = new AnimationSet(true);
+        Animation animation = new AlphaAnimation(0.0f, 1.0f);
+        animation.setDuration(50);
+        set.addAnimation(animation);
+        animation = new TranslateAnimation( Animation.RELATIVE_TO_SELF, 0.0f,Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, -1.0f,Animation.RELATIVE_TO_SELF, 0.0f );
+        animation.setDuration(100);
+        set.addAnimation(animation);
+        LayoutAnimationController controller = new LayoutAnimationController(set, 0.5f);
+        gvImages.setLayoutAnimation(controller);
+
         gvImages.setNumColumns(numColumns);
         gvImages.setBackgroundColor(imageBackgroundColor);
         gvImages.setAdapter(new SimpleAdapter(getActivity(), images,

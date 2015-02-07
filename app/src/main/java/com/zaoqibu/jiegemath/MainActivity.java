@@ -3,6 +3,7 @@ package com.zaoqibu.jiegemath;
 import android.app.FragmentManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -136,6 +137,10 @@ public class MainActivity extends ActionBarActivity implements ImageAndNumberFra
             return;
         }
 
+        result1.setEnabled(false);
+        result2.setEnabled(false);
+        result3.setEnabled(false);
+
         result = (int)v.getTag();
 
         if (result == problem.result()) { //正确
@@ -147,7 +152,20 @@ public class MainActivity extends ActionBarActivity implements ImageAndNumberFra
 
         resultFragment.setNumber(problem.result());
 
-        nextProblem();
+        Handler handler = new Handler();
+        handler.postDelayed(runnable, 3000);
     }
+
+    Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            resultFragment.setNumber(0);
+            nextProblem();
+
+            result1.setEnabled(true);
+            result2.setEnabled(true);
+            result3.setEnabled(true);
+        }
+    };
 
 }
