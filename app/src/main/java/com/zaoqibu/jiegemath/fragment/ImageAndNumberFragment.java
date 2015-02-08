@@ -21,9 +21,11 @@ import com.zaoqibu.jiegemath.customview.ImageButtonWithText;
 import com.zaoqibu.jiegemath.util.MediaPlayerSingleton;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * A simple {@link android.app.Fragment} subclass.
@@ -44,7 +46,7 @@ public class ImageAndNumberFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
-    private int imageBackgroundColor = 0xFFFFFFFF;
+    private int imageBackgroundColor = 0xDDFFFFFF;
     private int numColumns = 3;
     private int number;
 
@@ -116,6 +118,9 @@ public class ImageAndNumberFragment extends Fragment {
     }
 
     private void updateUI() {
+        if (getView() == null)
+            return;
+
         ImageButtonWithText tvNumber = (ImageButtonWithText)getView().findViewById(R.id.tvNumber);
         tvNumber.setText(number == 0 ? "" : String.format("%d", number));
         tvNumber.setTag(""+number);
@@ -130,9 +135,10 @@ public class ImageAndNumberFragment extends Fragment {
         });
 
         List<Map<String, Object>> images = new ArrayList<Map<String, Object>>();
+        int imageId = getImage();
         for (int i=0; i<number; ++i) {
             Map<String, Object> data = new HashMap<String, Object>();
-            data.put("image", R.drawable.cw);
+            data.put("image", imageId);
             images.add(data);
         }
         GridView gvImages = (GridView)getView().findViewById(R.id.gvImages);
@@ -152,6 +158,22 @@ public class ImageAndNumberFragment extends Fragment {
         gvImages.setAdapter(new SimpleAdapter(getActivity(), images,
                 R.layout.image_and_number_with_image,
                 new String[] {"image"}, new int[] {R.id.ivImage}));
+    }
+
+    private Integer getImage() {
+        List<Integer> images = new ArrayList<>();
+        images.add(R.drawable.a);
+        images.add(R.drawable.b);
+        images.add(R.drawable.c);
+        images.add(R.drawable.d);
+        images.add(R.drawable.e);
+        images.add(R.drawable.f);
+        images.add(R.drawable.g);
+        images.add(R.drawable.h);
+        images.add(R.drawable.i);
+
+        Random random = new Random(Calendar.getInstance().getTimeInMillis());
+        return images.get(random.nextInt(images.size()));
     }
 
     @Override
