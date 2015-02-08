@@ -21,11 +21,9 @@ import com.zaoqibu.jiegemath.customview.ImageButtonWithText;
 import com.zaoqibu.jiegemath.util.MediaPlayerSingleton;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 /**
  * A simple {@link android.app.Fragment} subclass.
@@ -50,8 +48,10 @@ public class ImageAndNumberFragment extends Fragment {
     private int numColumns = 3;
     private int number;
 
+    private int imageId = R.drawable.ic_launcher;
+
     /**
-     * Use this factory method to create a new instance of
+     * Use this factory method to create  new instance of
      * this fragment using the provided parameters.
      *
      * @param param1 Parameter 1.
@@ -101,6 +101,12 @@ public class ImageAndNumberFragment extends Fragment {
         }
     }
 
+    public void setImageId(int imageId) {
+        this.imageId = imageId;
+
+        updateUI();
+    }
+
     public void setNumber(int number) {
         this.number = number;
 
@@ -135,7 +141,6 @@ public class ImageAndNumberFragment extends Fragment {
         });
 
         List<Map<String, Object>> images = new ArrayList<Map<String, Object>>();
-        int imageId = getImage();
         for (int i=0; i<number; ++i) {
             Map<String, Object> data = new HashMap<String, Object>();
             data.put("image", imageId);
@@ -158,22 +163,6 @@ public class ImageAndNumberFragment extends Fragment {
         gvImages.setAdapter(new SimpleAdapter(getActivity(), images,
                 R.layout.image_and_number_with_image,
                 new String[] {"image"}, new int[] {R.id.ivImage}));
-    }
-
-    private Integer getImage() {
-        List<Integer> images = new ArrayList<>();
-        images.add(R.drawable.a);
-        images.add(R.drawable.b);
-        images.add(R.drawable.c);
-        images.add(R.drawable.d);
-        images.add(R.drawable.e);
-        images.add(R.drawable.f);
-        images.add(R.drawable.g);
-        images.add(R.drawable.h);
-        images.add(R.drawable.i);
-
-        Random random = new Random(Calendar.getInstance().getTimeInMillis());
-        return images.get(random.nextInt(images.size()));
     }
 
     @Override

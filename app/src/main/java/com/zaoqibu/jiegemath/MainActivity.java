@@ -65,6 +65,11 @@ public class MainActivity extends ActionBarActivity implements ImageAndNumberFra
     }
 
     private void nextProblem() {
+        final int imageId = getImage();
+        xFragment.setImageId(imageId);
+        yFragment.setImageId(imageId);
+        resultFragment.setImageId(imageId);
+
         problem = getProblemByRandom();
 
         xFragment.setNumber(problem.getX());
@@ -167,5 +172,52 @@ public class MainActivity extends ActionBarActivity implements ImageAndNumberFra
             result3.setEnabled(true);
         }
     };
+
+    //选择显示的图片
+    private Integer getImage() {
+        List<Integer> images = new ArrayList<>();
+        images.add(R.drawable.a);
+        images.add(R.drawable.b);
+        images.add(R.drawable.c);
+        images.add(R.drawable.d);
+        images.add(R.drawable.e);
+        images.add(R.drawable.f);
+        images.add(R.drawable.g);
+        images.add(R.drawable.h);
+        images.add(R.drawable.i);
+        images.add(R.drawable.pz13);
+        images.add(R.drawable.pz14);
+        images.add(R.drawable.pz15);
+        images.add(R.drawable.pz16);
+        images.add(R.drawable.pz17);
+        images.add(R.drawable.pz18);
+        images.add(R.drawable.pz19);
+        images.add(R.drawable.pz20);
+        images.add(R.drawable.pz21);
+        images.add(R.drawable.pz22);
+        images.add(R.drawable.pz23);
+        images.add(R.drawable.pz24);
+        images.add(R.drawable.pz25);
+        images.add(R.drawable.pz26);
+        images.add(R.drawable.pz27);
+        images.add(R.drawable.pz28);
+        images.add(R.drawable.pz29);
+        images.add(R.drawable.pz30);
+        images.add(R.drawable.pz31);
+        images.add(R.drawable.pz32);
+        images.add(R.drawable.pz33);
+        images.add(R.drawable.pz34);
+        images.add(R.drawable.pz35);
+        images.add(R.drawable.pz36);
+        images.add(R.drawable.pz37);
+        images.add(R.drawable.pz38);
+        images.add(R.drawable.pz39);
+        images.add(R.drawable.pz40);
+        images.add(R.drawable.pz41);
+        images.add(R.drawable.pz42);
+
+        Random random = new Random(Calendar.getInstance().getTimeInMillis());
+        return images.get(random.nextInt(images.size()));
+    }
 
 }
